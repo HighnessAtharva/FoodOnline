@@ -1,0 +1,28 @@
+/*
+CUSTOM SCROLLBARS
+*/
+:root {
+    --scroll-bar-color: #c5c5c5;
+    --scroll-bar-bg-color: #f6f6f6;
+
+}
+
+
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--scroll-bar-bg-color);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--scroll-bar-color);
+    border-radius: 20px;
+    border: 3px solid var(--scroll-bar-bg-color);
+}
+
+.zero-pads{
+    padding-left:0 !important;
+    padding-right:0 !important;
+}
