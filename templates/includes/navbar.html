@@ -25,10 +25,12 @@
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <div class="login-option">
-                            <a class="cs-color cs-popup-joinus-btn login-popup rounded-xl p-1 bg-primary text-white" href="#">Login</a>
+                        <div class="login-option"> {% if user.is_authenticated %} 
+                            <a class="cs-color cs-popup-joinus-btn login-popup rounded-xl p-1 bg-primary text-white" href="{% url 'myAccount' %}">Dashboard</a>
+
+                            <a class="cs-color cs-popup-joinus-btn login-popup rounded-xl p-1 bg-light  text-danger" href="{% url 'logout' %}">Logout</a> {% else %} <a class="cs-color cs-popup-joinus-btn login-popup rounded-xl p-1 bg-primary text-white" href="{% url 'login' %}">Login</a>
                             <a class="cs-color cs-popup-joinus-btn login-popup rounded-xl p-1 bg-primary text-white" href="{% url 'registerUser' %}">Register</a>
-                            <a class="get-start-btn" href="register-restaurant.html"> Register Restaurant </a>
+                            <a class="get-start-btn" href="{% url 'registerVendor' %}"> Register Restaurant </a> {% endif %}
                         </div>
                     </div>
                 </div>

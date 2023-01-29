@@ -1,0 +1,11 @@
+{% autoescape off %}
+
+Hi, {{ user.username }}!
+
+You're receiving this e-mail because you registered an account on FoodOnline.
+
+To activate your account, click this link:
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+{% endautoescape %}

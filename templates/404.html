@@ -1,0 +1,41 @@
+{% extends 'base.html' %} {% block content%} 
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>404 Error - Page Not Found</title>
+    <style>
+      body {
+        background-image: url("https://www.your-restaurant.com/img/bg.jpg");
+        background-size: cover;
+        font-family: 'Open Sans', sans-serif;
+        color: #fff;
+        text-align: center;
+      }
+      h1 {
+        font-size: 4em;
+        margin-top: 50px;
+      }
+      p {
+        font-size: 1.5em;
+        margin-top: 20px;
+      }
+      a {
+        color: #fff;
+        text-decoration: none;
+        border-bottom: 1px solid #fff;
+        padding-bottom: 5px;
+      }
+      a:hover {
+        color: #f1c40f;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>404 Error</h1>
+    <p>Sorry, the page you were looking for cannot be found.</p>
+    <p>Please check the URL and try again or return to the <a href="{% url 'home' %}">homepage</a>.</p>
+  </body>
+</html>
+
+
+{% endblock %}

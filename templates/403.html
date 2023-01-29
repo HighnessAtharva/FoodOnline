@@ -1,0 +1,59 @@
+{% extends 'base.html' %} {% block content%} 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>403 Forbidden</title>
+  <style>
+    body {
+      background-image: url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 50px 0;
+    }
+
+    h1 {
+      font-size: 5em;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.5em;
+      margin-bottom: 40px;
+    }
+
+    a#backhomebtn{
+      font-size: 1.2em;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 2px solid white;
+      border-radius: 30px;
+      transition: all 0.2s ease-in-out;
+    background-color: black;
+      
+    }
+
+    a#backhomebtn:hover {
+      background-color: rgb(255, 88, 88);
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>403 Forbidden</h1>
+    <p>Sorry, you do not have access to this page.</p>
+    <a id="backhomebtn" href="{% url 'home' %}">Go back to home page</a>
+  </div>
+</body>
+</html>
+
+
+{% endblock %}
