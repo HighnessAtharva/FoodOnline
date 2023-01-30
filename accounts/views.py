@@ -9,6 +9,8 @@ from .utils import detectUser, send_verification_email
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode
+from django.core.exceptions import PermissionDenied
+from vendor.models import Vendor
 
 def activate(request, uidb64, token):
     try:
@@ -51,8 +53,8 @@ def registerUser(request):
             
             # send verification email
             mail_subject = 'Activate your account'
-            email_template = 'accounts/emails/account_verification_email.html'
-            send_verification_email(request, user,mail_subject, email_template)
+            mail_template = 'accounts/emails/account_verification_email.html'
+            send_verification_email(request, user,mail_subject, mail_template)
             
             messages.success(request, f"Signup successful for user {username}!")            
             return redirect('registerUser')
@@ -172,8 +174,8 @@ def forgot_password(request):
         if User.objects.filter(email=email).exists():
             user= User.objects.get(email__iexact=email)
             mail_subject = 'Reset your password'
-            email_template = 'accounts/emails/reset_password_email.html'
-            send_verification_email(request, user, mail_subject, email_template)
+            mail_template = 'accounts/emails/reset_password_email.html'
+            send_verification_email(request, user, mail_subject, mail_template)
             messages.success(request, f'Password reset email has been sent to {email}')
             return redirect('login')
         else:

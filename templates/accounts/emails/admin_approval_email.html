@@ -1,0 +1,13 @@
+{% autoescape off %}
+
+Hi, {{ user.username }}!
+
+{% if is_approved %}
+Congrats, your restaurant has been approved! You can now login to your account and start adding your menu items.
+{% else %}
+Unfortunately, your restaurant has been rejected. Please contact us for more information.
+{% endif %}
+
+
+
+{% endautoescape %}
