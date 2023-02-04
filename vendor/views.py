@@ -78,7 +78,7 @@ def addCategory(request):
     if request.method == "POST":
         form=CategoryForm(request.POST)
         if form.is_valid():
-            category_name = form.cleaned_data['category_name']
+            category_name = form.cleaned_data['category_name'].capitalize()
             category=form.save(commit=False)
             category.vendor= get_vendor(request)
             category.slug = slugify(category_name)

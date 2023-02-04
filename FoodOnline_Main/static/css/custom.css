@@ -22,16 +22,16 @@ CUSTOM SCROLLBARS
     border: 3px solid var(--scroll-bar-bg-color);
 }
 
-.zero-pads{
-    padding-left:0 !important;
-    padding-right:0 !important;
+.zero-pads {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
-.forgot-pass{
-margin-top: 18px;
+.forgot-pass {
+    margin-top: 18px;
 }
 
-.btn.btn-info{
+.btn.btn-info {
     background-color: #f6f6f6;
     color: #000;
     cursor: pointer;
@@ -46,7 +46,7 @@ margin-top: 18px;
     border-color: #c5c5c5 !important;
 }
 
-#results{
+#results {
     margin-bottom: 20px;
     width: 95%;
     margin-left: 20px;
@@ -54,12 +54,16 @@ margin-top: 18px;
     z-index: 99;
 }
 
-.choice{
-    
+.choice {
+
     border: 1px solid rgb(80, 80, 80);
     padding: 3px;
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
     cursor: pointer;
+}
+
+.decrease_cart  {
+    margin-right:28px;
 }
