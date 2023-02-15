@@ -67,3 +67,21 @@ CUSTOM SCROLLBARS
 .decrease_cart  {
     margin-right:28px;
 }
+
+.home-results{
+    background-color: white !important;
+    text: black !important;
+    width: 32% !important;
+    margin-right: 380px !important;
+    margin-left: auto;
+    float: right;
+}
+
+.opening_hours.table{
+    width: 100%;
+    border: none !important;
+}
+
+#opening_hours select{
+    padding: 5px 10px !important;
+}

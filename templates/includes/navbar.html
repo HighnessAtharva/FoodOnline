@@ -17,8 +17,8 @@
                             <ul>
                                 <li class="location-has-children choose-location">
                                     <form action="#">
-                                        <input type="text" value="" name="location" placeholder="Enter your delivery location" autocomplete="off">
-                                        <span id="foodbakery_radius_location_open" class="foodbakery-radius-location"><i class="icon-target5"></i></span>
+                                        <input type="text" value="" name="location" id="location" placeholder="Your Delivery Location" autocomplete="off">
+                                        <span id="foodbakery_radius_location_open" class="foodbakery-radius-location" onclick="getLocation()"><i class="icon-target5"></i></span>
                                     </form>
                                 </li>
                             </ul>
@@ -47,4 +47,43 @@
             </div>
         </div>
     </header>
+
+
+    <script>
+        var x = document.getElementById("location");
+        var current_location = sessionStorage.getItem('current_location');
+        if(current_location!=""){
+            x.value = current_location;
+        }
+
+        function getLocation() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+          } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+          }
+        }
+        
+        function showPosition(position) {
+          var lat= position.coords.latitude;
+          var lng= position.coords.longitude;
+          const API_KEY ='{{ TOMTOM_API_KEY }}';
+        /* hit AJAX request to tomtom API using the latitude and longitude to get the address */
+         
+            $.ajax({
+                url: `https://api.tomtom.com/search/2/reverseGeocode/${lat}, ${lng}.json?key=${API_KEY}`,
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                var current_location = data.addresses[0].address.freeformAddress;
+                x.value = current_location;
+                sessionStorage.setItem('current_location', current_location);
+                window.location = "?lat="+lat+"&lng="+lng;
+
+                }
+            });
+        }
+        </script>
+
+
 </div>

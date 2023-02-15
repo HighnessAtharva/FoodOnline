@@ -19,7 +19,10 @@
                         <figure> {% if vendor.user_profile.profile_picture %} <img src="{{ vendor.user_profile.profile_picture.url }}" alt=""> {% else %} <img src="{% static 'images/blank-profile-pic.jpg' %}" alt=""> {% endif %} </figure>
                     </div>
                     <div class="text-holder">
-                        <span class="restaurant-title">{{ vendor.vendor_name }}</span>
+                        <span class="restaurant-title">{{ vendor.vendor_name }}
+
+                            {% if not vendor.is_open %} [Closed] {% endif %}
+                        </span>
                         <div class="text">
                             <i class="icon-location"></i> 
                              {% if vendor.user_profile.address %}
@@ -30,25 +33,38 @@
                         </div>
                     </div>
                 </div>
+                
+                {% if opening_hours %}
                 <div class="delivery-timing reviews-sortby">
                     <ul>
                         <li>
                             <a href="#" class="reviews-sortby-active">
-                                <span>Today :</span> 11:00 am - 11:00 pm <i class="icon-chevron-small-down"></i>
+                                <span>Today :</span> 
+                                {% for i in current_opening_hours %} 
+                                <span>{% if i.is_closed %}Closed {% else %} {{ i.from_hour }} - {{ i.to_hour }} {% endif %}</span>
+                                {% endfor %}
+                                <i class="icon-chevron-small-down"></i>
                             </a>
                             <ul class="delivery-dropdown">
-                                <li><a href="#"><span class="opend-day">Monday</span> <span class="opend-time"><small>:</small> 11:00 am - 11:00 pm</span></a></li>
-                                <li><a href="#"><span class="opend-day">Tuesday</span> <span class="opend-time"><small>:</small> 11:00 am - 11:00 pm</span></a></li>
-                                <li><a href="#"><span class="opend-day">Wednesday</span> <span class="opend-time"><small>:</small> 11:00 am - 11:00 pm</span></a></li>
-                                <li><a href="#"><span class="opend-day">Thursday</span> <span class="opend-time"><small>:</small> 11:00 am - 11:00 pm</span></a></li>
-                                <li><a href="#"><span class="opend-day">Friday</span> <span class="opend-time"><small>:</small> 11:00 am - 11:00 pm</span></a></li>
-                                <li><a href="#"><span class="opend-day">Saturday</span> <span class="opend-time"><small>:</small> 11:00 am - 11:00 pm</span></a></li>
-                                <li><a href="#"><span class="opend-day">Sunday</span> <span class="opend-time close-day"><small>:</small>Closed</span></a>
-                                </li>
+                                {% for day in opening_hours %}
+                                <li><a href="#"><span class="opend-day">{{ day }}</span> <span class="opend-time"><small>:</small> 
+                                    
+                                {% if day.is_closed %} 
+                                Closed
+                                {% else %}   
+                                    
+                                    {{ day.from_hour }} - {{ day.to_hour }}
+                                {% endif %}
+                                
+                                </span></a></li>
+                                {% endfor %}
                             </ul>
                         </li>
                     </ul>
                 </div>
+                {% endif %}
+
+
             </div>
         </div>
         <!-- Column End -->

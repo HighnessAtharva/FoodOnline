@@ -38,8 +38,7 @@
 <body>
     <!-- LOAD NAVBAR HERE --> {% include 'includes/navbar.html' %} <!-- LOAD CONTENT HERE  --> {% block content %} <!-- MAIN CONTENT WILL BE HERE --> {% endblock %} <!-- LOAD FOOTER HERE --> {% include 'includes/footer.html' %} 
     
-    
-    {% if '/profile/' in request.GET %}
+    {% if '/' == request.path or 'profile' in request.path %}
     <script>
         <!-- CUSTOM SCRIPT FOR AUTOCOMPLETE ADDRESS -->
         const API_KEY = '{{ TOMTOM_API_KEY }}';
@@ -80,16 +79,18 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log(data.results[0]);
+                    document.getElementById('id_latitude').value = data.results[0].position.lat;
+                    document.getElementById('id_longitude').value = data.results[0].position.lon;
                     document.getElementById('id_country').value = data.results[0].address.country;
                     document.getElementById('id_state').value = data.results[0].address.countrySubdivision;
                     document.getElementById('id_city').value = data.results[0].address.municipality;
                     document.getElementById('id_pin_code').value = data.results[0].address.postalCode;
-                    document.getElementById('id_latitude').value = data.results[0].position.lat;
-                    document.getElementById('id_longitude').value = data.results[0].position.lon;
+                  
                 });
         }
     </script>
     {% endif %}
+    
     <script src="{% static 'js/custom.js' %}"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
     <script src="{% static 'js/functions.js' %}"></script>
