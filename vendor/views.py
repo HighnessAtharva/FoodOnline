@@ -215,30 +215,36 @@ def openingHours(request):
 
 def addOpeningHours(request):
     # handle data and save to db
-    if request.user.is_authenticated:
-        if request.headers.get("x-requested-with") == "XMLHttpRequest" and request.method == "POST":
-            day = request.POST.get("day")
-            from_hour = request.POST.get("from_hour")
-            to_hour = request.POST.get("to_hour")
-            is_closed = request.POST.get("is_closed")
-            print(day, from_hour, to_hour, is_closed)
-            try:
-                hour = OpeningHour.objects.create(vendor=get_vendor(request), day=day, from_hour=from_hour, to_hour=to_hour, is_closed=is_closed)
-                if hour:
-                    day = OpeningHour.objects.get(id=hour.id)
-                    if day.is_closed:
-                        response = {'status': 'success', 'id': hour.id, 'day':day.get_day_display(), 'is_closed':'Closed'}
-                    else:
-                        response = {'status': 'success', 'id': hour.id, 'day':day.get_day_display(), 'from_hour': hour.from_hour, 'to_hour': hour.to_hour}
-                    
-                return JsonResponse(response)
-            
-            except IntegrityError as e:
-                response = {'status': 'failed', 'message': 'Hours already exist for this day.'}
-                return JsonResponse(response)
-                 
-        else:
-            HttpResponse("Invalid Request")    
+    if not request.user.is_authenticated:
+        return
+    if request.headers.get("x-requested-with") == "XMLHttpRequest" and request.method == "POST":
+        day = request.POST.get("day")
+        from_hour = request.POST.get("from_hour")
+        to_hour = request.POST.get("to_hour")
+        is_closed = request.POST.get("is_closed")
+        print(day, from_hour, to_hour, is_closed)
+        try:
+            if hour := OpeningHour.objects.create(
+                vendor=get_vendor(request),
+                day=day,
+                from_hour=from_hour,
+                to_hour=to_hour,
+                is_closed=is_closed,
+            ):
+                day = OpeningHour.objects.get(id=hour.id)
+                if day.is_closed:
+                    response = {'status': 'success', 'id': hour.id, 'day':day.get_day_display(), 'is_closed':'Closed'}
+                else:
+                    response = {'status': 'success', 'id': hour.id, 'day':day.get_day_display(), 'from_hour': hour.from_hour, 'to_hour': hour.to_hour}
+
+            return JsonResponse(response)
+
+        except IntegrityError as e:
+            response = {'status': 'failed', 'message': 'Hours already exist for this day.'}
+            return JsonResponse(response)
+
+    else:
+        HttpResponse("Invalid Request")    
             
 def removeOpeningHours(request, pk=None):
     if request.user.is_authenticated:
