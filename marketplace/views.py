@@ -164,50 +164,48 @@ def delete_cart(request, cart_id):
 
 def search(request):
 
-    if not "address" in request.GET:
+    if "address" not in request.GET:
         return redirect("marketplace")
-    else:
+    address = request.GET.get("address")
+    latitude = request.GET.get("lat")
+    longitude = request.GET.get("lng")
+    radius = request.GET.get("radius")
+    keyword = request.GET.get("keyword")
 
-        address = request.GET.get("address")
-        latitude = request.GET.get("lat")
-        longitude = request.GET.get("lng")
-        radius = request.GET.get("radius")
-        keyword = request.GET.get("keyword")
+    # get vendor ids that the food items belong to that match the keyword
+    fetch_vendors_by_fooditems = FoodItem.objects.filter(
+        food_title__icontains=keyword, is_available=True
+    ).values_list("vendor", flat=True)
 
-        # get vendor ids that the food items belong to that match the keyword
-        fetch_vendors_by_fooditems = FoodItem.objects.filter(
-            food_title__icontains=keyword, is_available=True
-        ).values_list("vendor", flat=True)
+    vendors = Vendor.objects.filter(
+        Q(id__in=fetch_vendors_by_fooditems)
+        | Q(vendor_name__icontains=keyword, is_approved=True, user__is_active=True)
+    )
 
-        vendors = Vendor.objects.filter(
-            Q(id__in=fetch_vendors_by_fooditems)
-            | Q(vendor_name__icontains=keyword, is_approved=True, user__is_active=True)
+    if latitude and longitude and radius:
+        pnt = GEOSGeometry(f"POINT({longitude} {latitude})", srid=4326)
+
+        vendors = (
+            Vendor.objects.filter(
+                Q(id__in=fetch_vendors_by_fooditems)
+                | Q(
+                    vendor_name__icontains=keyword,
+                    is_approved=True,
+                    user__is_active=True,
+                ),
+                user_profile__location__distance_lte=(pnt, D(km=radius)),
+            )
+            .annotate(distance=Distance("user_profile__location", pnt))
+            .order_by("distance")
         )
 
-        if latitude and longitude and radius:
-            pnt = GEOSGeometry(f"POINT({longitude} {latitude})", srid=4326)
+        for v in vendors:
+            v.kms = round(v.distance.km, 1)
 
-            vendors = (
-                Vendor.objects.filter(
-                    Q(id__in=fetch_vendors_by_fooditems)
-                    | Q(
-                        vendor_name__icontains=keyword,
-                        is_approved=True,
-                        user__is_active=True,
-                    ),
-                    user_profile__location__distance_lte=(pnt, D(km=radius)),
-                )
-                .annotate(distance=Distance("user_profile__location", pnt))
-                .order_by("distance")
-            )
-
-            for v in vendors:
-                v.kms = round(v.distance.km, 1)
-
-        vendors_count = vendors.count()
-        context = {
-            "vendors": vendors,
-            "vendors_count": vendors_count,
-            "source_location": address,
-        }
-        return render(request, "marketplace/listings.html", context)
+    vendors_count = vendors.count()
+    context = {
+        "vendors": vendors,
+        "vendors_count": vendors_count,
+        "source_location": address,
+    }
+    return render(request, "marketplace/listings.html", context)
