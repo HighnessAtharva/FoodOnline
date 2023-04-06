@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "marketplace",
     "customers",
     "django.contrib.gis",
+    "orders"
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
